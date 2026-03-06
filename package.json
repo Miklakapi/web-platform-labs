@@ -1,0 +1,27 @@
+{
+    "name": "web-components-playground",
+    "version": "1.0.0",
+    "description": "",
+    "homepage": "https://github.com/Miklakapi/web-components-playground#readme",
+    "bugs": {
+        "url": "https://github.com/Miklakapi/web-components-playground/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Miklakapi/web-components-playground.git"
+    },
+    "license": "ISC",
+    "author": "",
+    "type": "module",
+    "main": "index.js",
+    "scripts": {
+        "dev": "vite"
+    },
+    "dependencies": {
+        "lit": "^3.3.2"
+    },
+    "devDependencies": {
+        "typescript": "^5.9.3",
+        "vite": "^7.3.1"
+    }
+}
