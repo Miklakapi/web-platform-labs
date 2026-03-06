@@ -1,0 +1,26 @@
+:host {
+    display: block;
+}
+
+header {
+    height: 60px;
+    background: #222;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+h1 {
+    margin: 0;
+    font-size: 20px;
+}
+
+button {
+    border: 0;
+    padding: 8px 12px;
+    cursor: pointer;
+}
