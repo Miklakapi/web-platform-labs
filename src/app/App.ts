@@ -1,10 +1,10 @@
 import { LitElement, html, css } from 'lit'
 import { customElement, state } from 'lit/decorators.js'
 
-import '@/components/AppHeader.ts'
-import '@/components/SideMenu.ts'
+import '@/app/layout/AppHeader'
+import '@/app/layout/SideMenu'
 
-import { getCurrentRoute } from '@/router'
+import { getCurrentRoute } from '@/app/router'
 
 @customElement('app-view')
 export class AppView extends LitElement {

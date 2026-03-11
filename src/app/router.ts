@@ -11,25 +11,9 @@ export const routes: RouteItem[] = [
     {
         path: '/',
         title: 'Start',
-        loader: () => import('@/views/HomePage'),
+        loader: () => import('@/labs/home/HomePage'),
         render: () => html`
             <home-page></home-page>
-        `
-    },
-    {
-        path: '/buttons',
-        title: 'Buttons',
-        loader: () => import('@/views/ButtonsPage'),
-        render: () => html`
-            <buttons-page></buttons-page>
-        `
-    },
-    {
-        path: '/forms',
-        title: 'Forms',
-        loader: () => import('@/views/FormsPage'),
-        render: () => html`
-            <forms-page></forms-page>
         `
     }
 ]

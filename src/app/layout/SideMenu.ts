@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit'
 import { customElement, state } from 'lit/decorators.js'
-import { routes, getCurrentPath, navigate } from '@/router'
+import { routes, getCurrentPath, navigate } from '@/app/router'
 
 @customElement('side-menu')
 export class SideMenu extends LitElement {

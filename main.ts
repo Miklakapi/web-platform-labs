@@ -1,1 +1,1 @@
-import '@/views/App.ts'
+import '@/app/App.ts'
