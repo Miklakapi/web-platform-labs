@@ -14,6 +14,11 @@ export class BetterImagePage extends LitElement {
         return html`
             <p>Better Image</p>
             <better-image src="http://localhost:8080/api/better-image/photo1/small"></better-image>
+            <br />
+            <better-image src="http://localhost:8080/api/better-image/photo2/small"></better-image>
+            <br />
+            <better-image src="http://localhost:8080/api/better-image/photo3/small"></better-image>
+            <br />
         `
     }
 }
