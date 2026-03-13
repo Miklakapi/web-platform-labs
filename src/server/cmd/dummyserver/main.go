@@ -20,7 +20,7 @@ func main() {
 	defer stop()
 
 	engine := gin.New()
-	engine.Use(gin.Logger(), gin.Recovery())
+	engine.Use(gin.Logger(), gin.Recovery(), cors())
 
 	app.RegisterRoutes(engine)
 
@@ -53,4 +53,20 @@ func main() {
 	}
 
 	log.Println("server stopped gracefully")
+}
+
+func cors() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Authorization, Content-Type, If-None-Match")
+		c.Writer.Header().Set("Access-Control-Expose-Headers", "ETag")
+
+		if c.Request.Method == http.MethodOptions {
+			c.AbortWithStatus(204)
+			return
+		}
+
+		c.Next()
+	}
 }
