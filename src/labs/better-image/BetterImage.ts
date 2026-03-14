@@ -20,11 +20,36 @@ export class BetterImage extends HTMLElement {
     static observedAttributes = ['src', 'sources', 'target-width']
 
     private static readonly MIN_ACCEPTABLE_WIDTH_RATIO = 0.7
+    private static readonly observedElements = new WeakMap<Element, BetterImage>()
+    private static readonly sharedIntersectionObserver = new IntersectionObserver(
+        entries => {
+            for (const entry of entries) {
+                if (!entry.isIntersecting) {
+                    continue
+                }
+
+                const component = BetterImage.observedElements.get(entry.target)
+                if (!component) {
+                    continue
+                }
+
+                component.handleIntersection()
+                BetterImage.sharedIntersectionObserver.unobserve(entry.target)
+            }
+        },
+        {
+            root: null,
+            rootMargin: '300px 0px',
+            threshold: 0.01
+        }
+    )
 
     private root: ShadowRoot
     private image: HTMLImageElement
     private sourcesMap: ImageVariant[] = []
     private renderVersion = 0
+    private currentDisplayedSrc: string | null = null
+    private isReadyToLoadImage = false
 
     constructor() {
         super()
@@ -36,8 +61,13 @@ export class BetterImage extends HTMLElement {
         this.root.append(this.image)
     }
 
-    connectedCallback() {
+    connectedCallback(): void {
+        this.startObservingVisibility()
         this.render()
+    }
+
+    disconnectedCallback(): void {
+        this.stopObservingVisibility()
     }
 
     attributeChangedCallback() {
@@ -78,6 +108,10 @@ export class BetterImage extends HTMLElement {
             return
         }
 
+        if (!this.isReadyToLoadImage) {
+            return
+        }
+
         const previewVariant = this.selectPreviewVariant()
         const targetVariant = this.selectTargetVariant()
 
@@ -98,6 +132,11 @@ export class BetterImage extends HTMLElement {
     }
 
     private displayImage(src: string): void {
+        if (this.currentDisplayedSrc === src) {
+            return
+        }
+
+        this.currentDisplayedSrc = src
         this.image.src = src
     }
 
@@ -210,6 +249,24 @@ export class BetterImage extends HTMLElement {
             duration: 180,
             easing: 'ease-out'
         })
+    }
+
+    private handleIntersection(): void {
+        this.isReadyToLoadImage = true
+        this.render()
+    }
+
+    private startObservingVisibility(): void {
+        if (this.isReadyToLoadImage) {
+            return
+        }
+
+        BetterImage.observedElements.set(this, this)
+        BetterImage.sharedIntersectionObserver.observe(this)
+    }
+
+    private stopObservingVisibility(): void {
+        BetterImage.sharedIntersectionObserver.unobserve(this)
     }
 }
 

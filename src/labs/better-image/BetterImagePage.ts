@@ -15,6 +15,7 @@ export class BetterImagePage extends LitElement {
     `
 
     render() {
+        const count = 3000
         return html`
             <p>Better Image</p>
             <better-image src="http://localhost:8080/api/better-image/photo1/blur"></better-image>
@@ -32,6 +33,19 @@ export class BetterImagePage extends LitElement {
                 target-width="1000"
             ></better-image>
             <br />
+            ${Array.from(
+                { length: count },
+                (_, i) => html`
+                    <better-image
+                        sources="
+                    50:http://localhost:8080/api/better-image/photo${(i % 3) + 1}/blur
+                    400:http://localhost:8080/api/better-image/photo${(i % 3) + 1}/small
+                    1000:http://localhost:8080/api/better-image/photo${(i % 3) + 1}/full
+                "
+                    ></better-image>
+                    <br />
+                `
+            )}
         `
     }
 }
