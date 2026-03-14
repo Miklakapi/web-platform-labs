@@ -67,7 +67,7 @@ export class AppView extends LitElement {
             border: 1px solid var(--color-border);
             border-radius: var(--border-radius);
             padding: 24px;
-            max-height: calc(100vh - var(--header-height) - 4 * var(--page-padding));
+            max-height: calc(100vh - var(--header-height) - 4.5 * var(--page-padding));
             overflow: auto;
         }
     `
