@@ -30,12 +30,18 @@ export function getCurrentPath(): string {
     return window.location.pathname
 }
 
+export function isKnownRoute(path: string): boolean {
+    return routes.some(route => route.path === path)
+}
+
 export function getCurrentRoute(): RouteItem {
     const currentPath = getCurrentPath()
     return routes.find(route => route.path === currentPath) || routes[0]
 }
 
 export function navigate(path: string) {
+    const targetPath = isKnownRoute(path) ? path : '/'
+
     window.history.pushState({}, '', path)
     window.dispatchEvent(new Event('popstate'))
 }

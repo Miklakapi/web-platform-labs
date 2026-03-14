@@ -4,7 +4,7 @@ import { customElement, state } from 'lit/decorators.js'
 import '@/app/layout/AppHeader'
 import '@/app/layout/SideMenu'
 
-import { getCurrentRoute } from '@/app/router'
+import { getCurrentPath, getCurrentRoute, isKnownRoute } from '@/app/router'
 
 @customElement('app-view')
 export class AppView extends LitElement {
@@ -15,11 +15,16 @@ export class AppView extends LitElement {
     private pageLoaded = false
 
     private handleRouteChange = async () => {
+        const path = getCurrentPath()
+
+        if (!isKnownRoute(path)) {
+            window.history.replaceState({}, '', '/')
+        }
+
         this.route = getCurrentRoute()
         this.pageLoaded = false
 
         await this.route.loader()
-
         this.pageLoaded = true
     }
 
@@ -27,6 +32,13 @@ export class AppView extends LitElement {
         super.connectedCallback()
         window.addEventListener('popstate', this.handleRouteChange)
 
+        const path = getCurrentPath()
+
+        if (!isKnownRoute(path)) {
+            window.history.replaceState({}, '', '/')
+        }
+
+        this.route = getCurrentRoute()
         await this.route.loader()
         this.pageLoaded = true
     }
