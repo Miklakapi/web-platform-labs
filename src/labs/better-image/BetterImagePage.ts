@@ -8,16 +8,27 @@ export class BetterImagePage extends LitElement {
         :host {
             display: block;
         }
+
+        better-image {
+            width: 400px;
+        }
     `
 
     render() {
         return html`
             <p>Better Image</p>
-            <better-image src="http://localhost:8080/api/better-image/photo1/small"></better-image>
+            <better-image src="http://localhost:8080/api/better-image/photo1/blur"></better-image>
+            <better-image
+                sources="50:http://localhost:8080/api/better-image/photo1/blur 400:http://localhost:8080/api/better-image/photo1/small 1000:http://localhost:8080/api/better-image/photo1/full"
+            ></better-image>
             <br />
-            <better-image src="http://localhost:8080/api/better-image/photo2/small"></better-image>
+            <better-image
+                sources="50:http://localhost:8080/api/better-image/photo2/blur 400:http://localhost:8080/api/better-image/photo2/small 1000:http://localhost:8080/api/better-image/photo2/full"
+            ></better-image>
             <br />
-            <better-image src="http://localhost:8080/api/better-image/photo3/small"></better-image>
+            <better-image
+                sources="50:http://localhost:8080/api/better-image/photo3/blur 400:http://localhost:8080/api/better-image/photo3/small 1000:http://localhost:8080/api/better-image/photo3/full"
+            ></better-image>
             <br />
         `
     }
