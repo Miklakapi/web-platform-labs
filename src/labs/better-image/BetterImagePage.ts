@@ -20,6 +20,7 @@ export class BetterImagePage extends LitElement {
             <better-image src="http://localhost:8080/api/better-image/photo1/blur"></better-image>
             <better-image
                 sources="50:http://localhost:8080/api/better-image/photo1/blur 400:http://localhost:8080/api/better-image/photo1/small 1000:http://localhost:8080/api/better-image/photo1/full"
+                target-width="1000"
             ></better-image>
             <br />
             <better-image
@@ -28,6 +29,7 @@ export class BetterImagePage extends LitElement {
             <br />
             <better-image
                 sources="50:http://localhost:8080/api/better-image/photo3/blur 400:http://localhost:8080/api/better-image/photo3/small 1000:http://localhost:8080/api/better-image/photo3/full"
+                target-width="1000"
             ></better-image>
             <br />
         `
