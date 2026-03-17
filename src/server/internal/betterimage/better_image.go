@@ -52,7 +52,8 @@ func Handler(c *gin.Context) {
 	}
 
 	c.Header("ETag", etag)
-	c.Header("Cache-Control", "no-cache")
+	// c.Header("Cache-Control", "no-store") // Invalid version
+	c.Header("Cache-Control", "public, max-age=300, must-revalidate") // Valid version
 	c.Header("Content-Type", "image/jpeg")
 
 	c.File(filePath)
