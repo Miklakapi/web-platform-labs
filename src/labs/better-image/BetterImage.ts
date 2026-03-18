@@ -2,12 +2,51 @@ const sheet = new CSSStyleSheet()
 sheet.replaceSync(`
     :host {
         display: inline-block;
+        position: relative;
     }
 
     img {
         display: block;
         width: 100%;
         height: auto;
+    }
+
+    .reload-button {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 28px;
+        height: 28px;
+        border: none;
+        border-radius: 999px;
+        background: rgba(0, 0, 0, 0.55);
+        color: white;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transform: scale(0.9);
+        transition: opacity 0.16s ease, transform 0.16s ease, background 0.16s ease;
+        padding: 0;
+        z-index: 2;
+    }
+
+    .reload-button:hover {
+        background: rgba(0, 0, 0, 0.72);
+    }
+
+    :host(:hover) .reload-button {
+        opacity: 1;
+        pointer-events: auto;
+        transform: scale(1);
+    }
+
+    .reload-icon {
+        width: 14px;
+        height: 14px;
+        display: block;
     }
 `)
 
@@ -46,6 +85,7 @@ export class BetterImage extends HTMLElement {
 
     private root: ShadowRoot
     private image: HTMLImageElement
+    private reloadButton: HTMLButtonElement
     private sourcesMap: ImageVariant[] = []
     private renderVersion = 0
     private currentDisplayedSrc: string | null = null
@@ -58,7 +98,25 @@ export class BetterImage extends HTMLElement {
         this.root.adoptedStyleSheets = [sheet]
 
         this.image = document.createElement('img')
-        this.root.append(this.image)
+
+        this.reloadButton = document.createElement('button')
+        this.reloadButton.type = 'button'
+        this.reloadButton.className = 'reload-button'
+        this.reloadButton.setAttribute('aria-label', 'Odśwież zdjęcie')
+        this.reloadButton.innerHTML = `
+            <svg class="reload-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                    d="M20 12a8 8 0 1 1-2.34-5.66M20 4v6h-6"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                />
+            </svg>
+        `
+        this.reloadButton.addEventListener('click', this.handleReloadClick)
+
+        this.root.append(this.image, this.reloadButton)
     }
 
     connectedCallback(): void {
@@ -68,6 +126,7 @@ export class BetterImage extends HTMLElement {
 
     disconnectedCallback(): void {
         this.stopObservingVisibility()
+        this.reloadButton.removeEventListener('click', this.handleReloadClick)
     }
 
     attributeChangedCallback() {
@@ -267,6 +326,81 @@ export class BetterImage extends HTMLElement {
 
     private stopObservingVisibility(): void {
         BetterImage.sharedIntersectionObserver.unobserve(this)
+    }
+
+    private handleReloadClick = async (event: MouseEvent): Promise<void> => {
+        event.preventDefault()
+        event.stopPropagation()
+
+        const currentUrl = this.resolveCurrentImageUrl()
+        if (!currentUrl) {
+            return
+        }
+
+        await this.reloadImageThroughServiceWorker(currentUrl)
+        this.forceVisualReload()
+    }
+
+    private resolveCurrentImageUrl(): string | null {
+        if (this.currentDisplayedSrc) {
+            return this.currentDisplayedSrc
+        }
+
+        const src = this.getAttribute('src')
+        if (src) {
+            return src
+        }
+
+        return this.selectTargetVariant()?.src || this.selectPreviewVariant()?.src || null
+    }
+
+    private async reloadImageThroughServiceWorker(url: string): Promise<void> {
+        return new Promise((resolve, reject) => {
+            const controller = navigator.serviceWorker.controller
+
+            if (!controller) {
+                reject(new Error('No active service worker'))
+                return
+            }
+
+            const channel = new MessageChannel()
+
+            channel.port1.onmessage = event => {
+                if (event.data?.ok) {
+                    resolve()
+                    return
+                }
+
+                reject(new Error(event.data?.error || 'Failed to refresh image'))
+            }
+
+            controller.postMessage(
+                {
+                    type: 'better-image:reload',
+                    url
+                },
+                [channel.port2]
+            )
+        })
+    }
+
+    private forceVisualReload(): void {
+        const src = this.resolveCurrentImageUrl()
+        if (!src) {
+            return
+        }
+
+        const refreshedSrc = this.appendRefreshTimestamp(src)
+
+        this.currentDisplayedSrc = null
+        this.image.src = refreshedSrc
+    }
+
+    private appendRefreshTimestamp(src: string): string {
+        const url = new URL(src, window.location.origin)
+        url.searchParams.set('_bi_refresh', String(Date.now()))
+
+        return url.toString()
     }
 }
 

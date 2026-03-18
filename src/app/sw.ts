@@ -17,6 +17,33 @@ self.addEventListener('activate', event => {
     event.waitUntil(self.clients.claim())
 })
 
+self.addEventListener('message', event => {
+    if (event.data?.type !== 'better-image:reload') {
+        return
+    }
+
+    const port = event.ports?.[0]
+
+    event.waitUntil(
+        (async () => {
+            try {
+                const url = event.data.url
+
+                if (!url) {
+                    throw new Error('Missing url')
+                }
+
+                await reloadImage(url)
+
+                port?.postMessage({ ok: true })
+            } catch (error) {
+                const message = error instanceof Error ? error.message : 'Unknown error'
+                port?.postMessage({ ok: false, error: message })
+            }
+        })()
+    )
+})
+
 self.addEventListener('fetch', event => {
     const url = new URL(event.request.url)
 
@@ -26,6 +53,37 @@ self.addEventListener('fetch', event => {
 
     event.respondWith(handleAuthorizedRequest(event.request))
 })
+
+async function reloadImage(urlPath: string): Promise<void> {
+    const originalUrl = new URL(urlPath, self.location.origin)
+    const originalRequest = new Request(originalUrl.toString(), {
+        method: 'GET'
+    })
+
+    const token = await ensureAccessToken()
+
+    let response = await fetch(buildAuthorizedRequest(originalRequest, token), {
+        cache: 'reload'
+    })
+
+    if (response.status !== 401) {
+        if (!response.ok) {
+            throw new Error(`Reload failed: ${response.status}`)
+        }
+
+        return
+    }
+
+    const newToken = await refreshAccessToken()
+
+    response = await fetch(buildAuthorizedRequest(originalRequest, newToken), {
+        cache: 'reload'
+    })
+
+    if (!response.ok) {
+        throw new Error(`Reload failed: ${response.status}`)
+    }
+}
 
 function shouldHandleRequest(url: URL): boolean {
     return url.pathname.startsWith('/api/')
@@ -80,8 +138,9 @@ async function ensureAccessToken(): Promise<string> {
 
 function buildAuthorizedRequest(request: Request, token: string): Request {
     const sourceUrl = new URL(request.url)
-    const targetUrl = new URL(sourceUrl.pathname + sourceUrl.search, serverAddr)
+    sourceUrl.searchParams.delete('_bi_refresh')
 
+    const targetUrl = new URL(sourceUrl.pathname + sourceUrl.search, serverAddr)
     const headers = new Headers(request.headers)
 
     if (token) {
@@ -91,6 +150,7 @@ function buildAuthorizedRequest(request: Request, token: string): Request {
     return new Request(targetUrl.toString(), {
         method: request.method,
         headers,
+        body: request.body,
         mode: 'cors',
         credentials: 'omit'
     } as RequestInit)
