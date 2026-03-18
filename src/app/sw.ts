@@ -1,4 +1,4 @@
-import { handleBetterImage } from '@/labs/better-image/sw'
+export {}
 
 declare const self: ServiceWorkerGlobalScope
 
@@ -20,16 +20,21 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
     const url = new URL(event.request.url)
 
-    if (url.pathname.startsWith('/api/better-image')) {
-        event.respondWith(handleAuthorizedRequest(event.request, handleBetterImage))
+    if (!shouldHandleRequest(url)) {
         return
     }
+
+    event.respondWith(handleAuthorizedRequest(event.request))
 })
 
-async function handleAuthorizedRequest(request: Request, handler: (request: Request) => Promise<Response>): Promise<Response> {
+function shouldHandleRequest(url: URL): boolean {
+    return url.pathname.startsWith('/api/')
+}
+
+async function handleAuthorizedRequest(request: Request): Promise<Response> {
     const token = await ensureAccessToken()
 
-    let response = await handler(buildAuthorizedRequest(request, token))
+    let response = await dispatchRequest(buildAuthorizedRequest(request, token), request)
 
     if (response.status !== 401) {
         return response
@@ -37,9 +42,32 @@ async function handleAuthorizedRequest(request: Request, handler: (request: Requ
 
     const newToken = await refreshAccessToken()
 
-    response = await handler(buildAuthorizedRequest(request, newToken))
+    response = await dispatchRequest(buildAuthorizedRequest(request, newToken), request)
 
     return response
+}
+
+async function dispatchRequest(authorizedRequest: Request, originalRequest: Request): Promise<Response> {
+    const response = await fetch(authorizedRequest)
+    const url = new URL(originalRequest.url)
+
+    if (!url.pathname.startsWith('/api/better-image')) {
+        return response
+    }
+
+    return rewriteBrowserCacheHeaders(response, 'no-cache')
+}
+
+function rewriteBrowserCacheHeaders(response: Response, cacheControl: string): Response {
+    const headers = new Headers(response.headers)
+
+    headers.set('Cache-Control', cacheControl)
+
+    return new Response(response.body, {
+        status: response.status,
+        statusText: response.statusText,
+        headers
+    })
 }
 
 async function ensureAccessToken(): Promise<string> {
@@ -51,24 +79,21 @@ async function ensureAccessToken(): Promise<string> {
 }
 
 function buildAuthorizedRequest(request: Request, token: string): Request {
-    const url = new URL(request.url)
-    const targetUrl = new URL(url.pathname + url.search, serverAddr)
+    const sourceUrl = new URL(request.url)
+    const targetUrl = new URL(sourceUrl.pathname + sourceUrl.search, serverAddr)
 
-    const headers = new Headers()
-    headers.set('Accept', 'image/*')
+    const headers = new Headers(request.headers)
 
     if (token) {
         headers.set('Authorization', `Bearer ${token}`)
     }
 
-    const newRequest = new Request(targetUrl.toString(), {
-        method: 'GET',
+    return new Request(targetUrl.toString(), {
+        method: request.method,
         headers,
         mode: 'cors',
         credentials: 'omit'
-    })
-
-    return newRequest
+    } as RequestInit)
 }
 
 async function refreshAccessToken(): Promise<string> {
