@@ -16,6 +16,7 @@ func RegisterRoutes(engine *gin.Engine) {
 	api.Use(requireAccessToken())
 	{
 		api.GET("/better-image/:name/:size", betterimage.Handler)
+		api.GET("/better-image-random/:size", betterimage.RandomHandler)
 	}
 }
 
