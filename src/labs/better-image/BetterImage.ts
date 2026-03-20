@@ -1,3 +1,5 @@
+import { BetterImageOpenDetail } from './BetterImageViewer'
+
 const sheet = new CSSStyleSheet()
 sheet.replaceSync(`
     :host {
@@ -352,12 +354,12 @@ export class BetterImage extends HTMLElement {
         }
 
         this.dispatchEvent(
-            new CustomEvent('better-image:open', {
+            new CustomEvent<BetterImageOpenDetail>('better-image:open', {
                 bubbles: true,
                 composed: true,
                 detail: {
-                    previewSrc: previewSrc || fullSrc,
-                    fullSrc: fullSrc || previewSrc
+                    previewSrc,
+                    fullSrc
                 }
             })
         )
