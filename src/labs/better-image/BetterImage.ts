@@ -115,6 +115,7 @@ export class BetterImage extends HTMLElement {
             </svg>
         `
         this.reloadButton.addEventListener('click', this.handleReloadClick)
+        this.image.addEventListener('click', this.handleOpenPreview)
 
         this.root.append(this.image, this.reloadButton)
     }
@@ -127,6 +128,7 @@ export class BetterImage extends HTMLElement {
     disconnectedCallback(): void {
         this.stopObservingVisibility()
         this.reloadButton.removeEventListener('click', this.handleReloadClick)
+        this.image.removeEventListener('click', this.handleOpenPreview)
     }
 
     attributeChangedCallback() {
@@ -341,6 +343,26 @@ export class BetterImage extends HTMLElement {
         this.forceVisualReload()
     }
 
+    private handleOpenPreview = () => {
+        const previewSrc = this.resolvePreviewImageUrl()
+        const fullSrc = this.resolveFullImageUrl()
+
+        if (!previewSrc && !fullSrc) {
+            return
+        }
+
+        this.dispatchEvent(
+            new CustomEvent('better-image:open', {
+                bubbles: true,
+                composed: true,
+                detail: {
+                    previewSrc: previewSrc || fullSrc,
+                    fullSrc: fullSrc || previewSrc
+                }
+            })
+        )
+    }
+
     private resolveCurrentImageUrl(): string | null {
         if (this.currentDisplayedSrc) {
             return this.currentDisplayedSrc
@@ -352,6 +374,28 @@ export class BetterImage extends HTMLElement {
         }
 
         return this.selectTargetVariant()?.src || this.selectPreviewVariant()?.src || null
+    }
+
+    private resolvePreviewImageUrl(): string | null {
+        if (this.currentDisplayedSrc) {
+            return this.currentDisplayedSrc
+        }
+
+        const src = this.getAttribute('src')
+        if (src) {
+            return src
+        }
+
+        return this.selectPreviewVariant()?.src || null
+    }
+
+    private resolveFullImageUrl(): string | null {
+        const src = this.getAttribute('src')
+        if (src) {
+            return src
+        }
+
+        return this.findLargestVariant()?.src || this.selectPreviewVariant()?.src || null
     }
 
     private async reloadImageThroughServiceWorker(url: string): Promise<void> {
