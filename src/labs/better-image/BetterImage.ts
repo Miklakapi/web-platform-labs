@@ -5,12 +5,15 @@ sheet.replaceSync(`
     :host {
         display: inline-block;
         position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(0,0,0,0.05);
     }
 
     img {
         display: block;
         width: 100%;
-        height: auto;
+        height: 100%;
+        object-fit: contain;
     }
 
     .reload-button {
@@ -58,7 +61,7 @@ type ImageVariant = {
 }
 
 export class BetterImage extends HTMLElement {
-    static observedAttributes = ['src', 'sources', 'target-width']
+    static observedAttributes = ['src', 'sources', 'target-width', 'width', 'height']
 
     private static readonly MIN_ACCEPTABLE_WIDTH_RATIO = 0.7
     private static readonly observedElements = new WeakMap<Element, BetterImage>()
@@ -81,7 +84,7 @@ export class BetterImage extends HTMLElement {
         {
             root: null,
             rootMargin: '300px 0px',
-            threshold: 0.01
+            threshold: 0
         }
     )
 
@@ -100,11 +103,13 @@ export class BetterImage extends HTMLElement {
         this.root.adoptedStyleSheets = [sheet]
 
         this.image = document.createElement('img')
+        this.image.width = 400
+        this.image.height = 300
 
         this.reloadButton = document.createElement('button')
         this.reloadButton.type = 'button'
         this.reloadButton.className = 'reload-button'
-        this.reloadButton.setAttribute('aria-label', 'Odśwież zdjęcie')
+        this.reloadButton.setAttribute('aria-label', 'Refresh image')
         this.reloadButton.innerHTML = `
             <svg class="reload-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path
@@ -138,6 +143,8 @@ export class BetterImage extends HTMLElement {
     }
 
     private render() {
+        this.applyImageDimensions()
+
         const currentRenderVersion = this.createRenderVersion()
         const src = this.getAttribute('src')
 
@@ -147,6 +154,17 @@ export class BetterImage extends HTMLElement {
         }
 
         this.renderResponsiveImage(currentRenderVersion)
+    }
+
+    private applyImageDimensions(): void {
+        const width = Number(this.getAttribute('width'))
+        const height = Number(this.getAttribute('height'))
+
+        const resolvedWidth = Number.isFinite(width) && width > 0 ? width : 400
+        const resolvedHeight = Number.isFinite(height) && height > 0 ? height : 300
+
+        this.style.width = `${resolvedWidth}px`
+        this.style.height = `${resolvedHeight}px`
     }
 
     private createRenderVersion(): number {

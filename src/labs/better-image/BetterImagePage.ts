@@ -9,8 +9,9 @@ export class BetterImagePage extends LitElement {
             display: block;
         }
 
-        better-image {
-            width: 400px;
+        .top-row {
+            display: flex;
+            gap: 16px;
         }
     `
 
@@ -18,12 +19,23 @@ export class BetterImagePage extends LitElement {
         const count = 3000
         return html`
             <p>Better Image</p>
-            <better-image src="http://localhost:8080/api/better-image/photo1/blur"></better-image>
-            <better-image src="http://localhost:8080/api/better-image-random/full"></better-image>
-            <better-image
-                sources="50:http://localhost:8080/api/better-image/photo1/blur 400:http://localhost:8080/api/better-image/photo1/small 1000:http://localhost:8080/api/better-image/photo1/full"
-                target-width="1000"
-            ></better-image>
+            <div class="top-row">
+                <div class="section">
+                    <h3>Blur</h3>
+                    <better-image src="http://localhost:8080/api/better-image/photo1/blur"></better-image>
+                </div>
+                <div class="section">
+                    <h3>Random</h3>
+                    <better-image src="http://localhost:8080/api/better-image-random/full"></better-image>
+                </div>
+                <div class="section">
+                    <h3>Target width</h3>
+                    <better-image
+                        sources="50:http://localhost:8080/api/better-image/photo1/blur 400:http://localhost:8080/api/better-image/photo1/small 1000:http://localhost:8080/api/better-image/photo1/full"
+                        target-width="1000"
+                    ></better-image>
+                </div>
+            </div>
             <br />
             <better-image
                 sources="50:http://localhost:8080/api/better-image/photo2/blur 400:http://localhost:8080/api/better-image/photo2/small 1000:http://localhost:8080/api/better-image/photo2/full"
