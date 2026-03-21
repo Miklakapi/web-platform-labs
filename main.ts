@@ -1,4 +1,5 @@
 import '@/app/App.ts'
+import '@/labs/better-image/BetterImageViewer'
 
 if ('serviceWorker' in navigator) {
     try {
