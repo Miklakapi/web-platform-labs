@@ -351,7 +351,7 @@ export class BetterImage extends HTMLElement {
         BetterImage.sharedIntersectionObserver.unobserve(this)
     }
 
-    private handleReloadClick = async (event: MouseEvent): Promise<void> => {
+    private handleReloadClick = (event: MouseEvent): void => {
         event.preventDefault()
         event.stopPropagation()
 
@@ -360,7 +360,6 @@ export class BetterImage extends HTMLElement {
             return
         }
 
-        await this.reloadImageThroughServiceWorker(currentUrl)
         this.forceVisualReload()
     }
 
@@ -419,53 +418,26 @@ export class BetterImage extends HTMLElement {
         return this.findLargestVariant()?.src || this.selectPreviewVariant()?.src || null
     }
 
-    private async reloadImageThroughServiceWorker(url: string): Promise<void> {
-        return new Promise((resolve, reject) => {
-            const controller = navigator.serviceWorker.controller
-
-            if (!controller) {
-                reject(new Error('No active service worker'))
-                return
-            }
-
-            const channel = new MessageChannel()
-
-            channel.port1.onmessage = event => {
-                if (event.data?.ok) {
-                    resolve()
-                    return
-                }
-
-                reject(new Error(event.data?.error || 'Failed to refresh image'))
-            }
-
-            controller.postMessage(
-                {
-                    type: 'better-image:reload',
-                    url
-                },
-                [channel.port2]
-            )
-        })
-    }
-
-    private forceVisualReload(): void {
+    private async forceVisualReload(): Promise<void> {
         const src = this.resolveCurrentImageUrl()
         if (!src) {
             return
         }
 
-        const refreshedSrc = this.appendRefreshTimestamp(src)
+        const response = await fetch(src, {
+            method: 'GET',
+            cache: 'reload'
+        })
 
-        this.currentDisplayedSrc = null
-        this.image.src = refreshedSrc
-    }
+        if (!response.ok) {
+            throw new Error(`Reload failed: ${response.status}`)
+        }
 
-    private appendRefreshTimestamp(src: string): string {
-        const url = new URL(src, window.location.origin)
-        url.searchParams.set('_bi_refresh', String(Date.now()))
+        const blob = await response.blob()
+        const objectUrl = URL.createObjectURL(blob)
 
-        return url.toString()
+        this.currentDisplayedSrc = src
+        this.image.src = objectUrl
     }
 }
 
