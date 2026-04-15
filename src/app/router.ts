@@ -42,6 +42,6 @@ export function getCurrentRoute(): RouteItem {
 export function navigate(path: string) {
     const targetPath = isKnownRoute(path) ? path : '/'
 
-    window.history.pushState({}, '', path)
+    window.history.pushState({}, '', targetPath)
     window.dispatchEvent(new Event('popstate'))
 }

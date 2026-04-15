@@ -10,10 +10,7 @@ import (
 func RegisterRoutes(engine *gin.Engine) {
 	engine.GET("/health", healthHandler)
 
-	engine.POST("/api/auth/refresh", refreshHandler)
-
 	api := engine.Group("/api")
-	api.Use(requireAccessToken())
 	{
 		api.GET("/better-image/:name/:size", betterimage.Handler)
 		api.GET("/better-image-random/:size", betterimage.RandomHandler)
