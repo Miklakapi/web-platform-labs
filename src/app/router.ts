@@ -21,7 +21,15 @@ export const routes: RouteItem[] = [
         title: 'Better Image',
         loader: () => import('@/labs/better-image/BetterImagePage'),
         render: () => html`
-            <better-image-page></-page>
+            <better-image-page></better-image-page>
+        `
+    },
+    {
+        path: '/better-table',
+        title: 'Better Table',
+        loader: () => import('@/labs/better-table/BetterTablePage'),
+        render: () => html`
+            <better-table-page></better-table-page>
         `
     }
 ]
