@@ -4,9 +4,6 @@ type BetterTableColumn<T = any> = {
     key: string
     title: string
     width?: number
-    minWidth?: number
-    maxWidth?: number
-    resizable?: boolean
     className?: string | ((ctx: BetterTableCellContext<T>) => string | undefined)
     style?: string | ((ctx: BetterTableCellContext<T>) => string | undefined)
     headerClassName?: string
@@ -35,9 +32,6 @@ type BetterTableSetDataOptions<T = any> = {
 type BetterTableInternalColumn<T = any> = BetterTableColumn<T> & {
     _id: string
     width: number
-    minWidth: number
-    maxWidth: number
-    resizable: boolean
 }
 
 type ProductRow = {
