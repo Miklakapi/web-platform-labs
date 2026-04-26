@@ -31,6 +31,14 @@ export const routes: RouteItem[] = [
         render: () => html`
             <better-table-page></better-table-page>
         `
+    },
+    {
+        path: '/tool-tip',
+        title: 'Tool Tip',
+        loader: () => import('@/labs/tool-tip/ToolTipPage'),
+        render: () => html`
+            <tool-tip-page></tool-tip-page>
+        `
     }
 ]
 
