@@ -39,6 +39,14 @@ export const routes: RouteItem[] = [
         render: () => html`
             <tool-tip-page></tool-tip-page>
         `
+    },
+    {
+        path: '/better-select',
+        title: 'Better select',
+        loader: () => import('@/labs/better-select/BetterSelectPage'),
+        render: () => html`
+            <better-select-page></better-select-page>
+        `
     }
 ]
 
