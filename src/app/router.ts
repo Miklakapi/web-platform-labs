@@ -42,10 +42,18 @@ export const routes: RouteItem[] = [
     },
     {
         path: '/better-select',
-        title: 'Better select',
+        title: 'Better Select',
         loader: () => import('@/labs/better-select/BetterSelectPage'),
         render: () => html`
             <better-select-page></better-select-page>
+        `
+    },
+    {
+        path: '/global-store',
+        title: 'Global Store',
+        loader: () => import('@/labs/global-store/GlobalStorePage'),
+        render: () => html`
+            <global-store-page></global-store-page>
         `
     }
 ]
