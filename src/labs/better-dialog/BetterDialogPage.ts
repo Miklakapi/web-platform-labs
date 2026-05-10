@@ -56,6 +56,9 @@ export class BetterDialogPage extends LitElement {
     @state()
     private secondDialogOpened = false
 
+    @state()
+    private criticalDialogOpened = false
+
     @query('#method-dialog')
     private methodDialog!: BetterDialogElement
 
@@ -73,6 +76,11 @@ export class BetterDialogPage extends LitElement {
                     <div class="buttons">
                         <button @click=${this.openFirstDialogByState}>Open state dialog</button>
                         <button @click=${this.closeFirstDialogByState}>Close state dialog</button>
+                    </div>
+
+                    <div class="buttons">
+                        <button @click=${this.openCriticalDialogByState}>Open critical dialog</button>
+                        <button @click=${this.closeCriticalDialogByState}>Close critical dialog</button>
                     </div>
 
                     <div class="buttons">
@@ -119,6 +127,22 @@ export class BetterDialogPage extends LitElement {
                             <button @click=${this.closeSecondDialogByState}>Close</button>
                         </div>
                     </better-dialog>
+
+                    <better-dialog
+                        title="Critical modal dialog"
+                        modal
+                        shakeOnBackdropClick
+                        .opened=${this.criticalDialogOpened}
+                        @close=${() => {
+                            this.criticalDialogOpened = false
+                        }}
+                    >
+                        <div class="dialog-content">
+                            <p>This dialog requires your attention first.</p>
+
+                            <button @click=${this.closeCriticalDialogByState}>Close</button>
+                        </div>
+                    </better-dialog>
                 </div>
             </div>
         `
@@ -146,5 +170,12 @@ export class BetterDialogPage extends LitElement {
 
     private closeSecondDialogByState() {
         this.secondDialogOpened = false
+    }
+
+    private openCriticalDialogByState() {
+        this.criticalDialogOpened = true
+    }
+    private closeCriticalDialogByState() {
+        this.criticalDialogOpened = false
     }
 }
