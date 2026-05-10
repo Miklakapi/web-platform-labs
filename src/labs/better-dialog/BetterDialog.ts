@@ -132,7 +132,12 @@ class BetterDialog extends LitElement {
                         <slot name="header">${this.title}</slot>
                     </div>
 
-                    <button type="button" class="close-button" @pointerdown=${(event: PointerEvent) => event.stopPropagation()} @click=${this.close}>
+                    <button
+                        type="button"
+                        class="close-button"
+                        @pointerdown=${(event: PointerEvent) => event.stopPropagation()}
+                        @click=${() => this.close()}
+                    >
                         ×
                     </button>
                 </div>
@@ -283,5 +288,18 @@ class BetterDialog extends LitElement {
 
     private handleDialogClose() {
         this.opened = false
+        this.dispatchCloseEvent()
+    }
+
+    private dispatchCloseEvent() {
+        this.dispatchEvent(
+            new CustomEvent('close', {
+                detail: {
+                    opened: this.opened
+                },
+                bubbles: true,
+                composed: true
+            })
+        )
     }
 }
