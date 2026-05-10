@@ -63,6 +63,14 @@ export const routes: RouteItem[] = [
         render: () => html`
             <tri-state-page></tri-state-page>
         `
+    },
+    {
+        path: '/better-dialog',
+        title: 'Better dialog',
+        loader: () => import('@/labs/better-dialog/BetterDialogPage'),
+        render: () => html`
+            <better-dialog-page></better-dialog-page>
+        `
     }
 ]
 
