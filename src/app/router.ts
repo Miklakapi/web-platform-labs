@@ -55,6 +55,14 @@ export const routes: RouteItem[] = [
         render: () => html`
             <global-store-page></global-store-page>
         `
+    },
+    {
+        path: '/tri-state',
+        title: 'Tri State',
+        loader: () => import('@/labs/tri-state/TriStatePage'),
+        render: () => html`
+            <tri-state-page></tri-state-page>
+        `
     }
 ]
 
