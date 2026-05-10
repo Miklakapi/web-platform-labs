@@ -114,6 +114,7 @@ class BetterSelect extends LitElement {
         super.disconnectedCallback()
         this.stopListeningOutsideClick()
     }
+
     render() {
         return html`
             <div class="select">
