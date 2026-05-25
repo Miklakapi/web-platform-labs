@@ -13,5 +13,8 @@
             "@/*": ["./src/*"]
         }
     },
+    "plugins": [
+        {"name":"ts-lit-plugin"}
+    ],
     "include": ["src/**/*.ts", "vite-env.d.ts"]
 }
