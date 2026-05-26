@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit'
-import { customElement, state } from 'lit/decorators.js'
+import { customElement } from 'lit/decorators.js'
 import '@/labs/better-select/BetterSelect'
 
 const OPTIONS_COUNT = 10000
