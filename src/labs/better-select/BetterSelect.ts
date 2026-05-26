@@ -135,7 +135,7 @@ class BetterSelect extends LitElement {
         }
 
         return html`
-            ${this.selectedValues.map(value => {
+            ${this.selectedValues.map((value) => {
                 return html`
                     <input type="hidden" name=${this.name} value=${value} />
                 `
@@ -166,7 +166,7 @@ class BetterSelect extends LitElement {
             >
                 <div class="virtual-space" style="height: ${totalHeight}px;">
                     <div class="virtual-items" style="transform: translateY(${offsetY}px);">
-                        ${visibleOptions.map(option => {
+                        ${visibleOptions.map((option) => {
                             const selected = this.isSelected(option.value)
 
                             return html`
@@ -249,7 +249,7 @@ class BetterSelect extends LitElement {
 
     private toggleMultiValue(value: string) {
         if (this.selectedValues.includes(value)) {
-            this.selectedValues = this.selectedValues.filter(selectedValue => {
+            this.selectedValues = this.selectedValues.filter((selectedValue) => {
                 return selectedValue !== value
             })
 
@@ -268,11 +268,11 @@ class BetterSelect extends LitElement {
             return 'Select option'
         }
 
-        const selectedOptions = this.options.filter(option => {
+        const selectedOptions = this.options.filter((option) => {
             return this.selectedValues.includes(option.value)
         })
 
-        return selectedOptions.map(option => option.label).join(', ')
+        return selectedOptions.map((option) => option.label).join(', ')
     }
 
     private handleDropdownScroll(event: Event) {
@@ -290,11 +290,11 @@ class BetterSelect extends LitElement {
             new CustomEvent('change', {
                 detail: {
                     value: this.multiple ? this.selectedValues : (this.selectedValues[0] ?? null),
-                    values: this.selectedValues
+                    values: this.selectedValues,
                 },
                 bubbles: true,
-                composed: true
-            })
+                composed: true,
+            }),
         )
     }
 }

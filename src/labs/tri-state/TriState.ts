@@ -86,16 +86,16 @@ class TriState extends LitElement {
     options: TriStateOption[] = [
         {
             label: 'No',
-            value: -1
+            value: -1,
         },
         {
             label: 'Yes',
-            value: 1
+            value: 1,
         },
         {
             label: 'None',
-            value: 0
-        }
+            value: 0,
+        },
     ]
 
     render() {
@@ -111,7 +111,7 @@ class TriState extends LitElement {
         const renderers: Record<TriStateMode, () => TemplateResult> = {
             select: () => this.renderSelect(),
             switch: () => this.renderSwitch(),
-            checkbox: () => this.renderCheckbox()
+            checkbox: () => this.renderCheckbox(),
         }
 
         return renderers[this.mode]()
@@ -128,9 +128,9 @@ class TriState extends LitElement {
                 }}
             >
                 ${this.options.map(
-                    option => html`
+                    (option) => html`
                         <option value=${String(option.value)} ?selected=${option.value === this.value}>${option.label}</option>
-                    `
+                    `,
                 )}
             </select>
         `
@@ -233,11 +233,11 @@ class TriState extends LitElement {
         this.dispatchEvent(
             new CustomEvent('change', {
                 detail: {
-                    value: this.value
+                    value: this.value,
                 },
                 bubbles: true,
-                composed: true
-            })
+                composed: true,
+            }),
         )
     }
 }

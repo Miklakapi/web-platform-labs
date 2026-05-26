@@ -38,7 +38,7 @@ export class BetterSelectPage extends LitElement {
 
             return {
                 label: `Option ${optionNumber}`,
-                value: `option-${optionNumber}`
+                value: `option-${optionNumber}`,
             }
         })
     }

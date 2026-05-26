@@ -67,7 +67,7 @@ export class BetterImage extends HTMLElement {
     private static readonly MIN_ACCEPTABLE_WIDTH_RATIO = 0.7
     private static readonly observedElements = new WeakMap<Element, BetterImage>()
     private static readonly sharedIntersectionObserver = new IntersectionObserver(
-        entries => {
+        (entries) => {
             for (const entry of entries) {
                 if (!entry.isIntersecting) {
                     continue
@@ -85,8 +85,8 @@ export class BetterImage extends HTMLElement {
         {
             root: null,
             rootMargin: '300px 0px',
-            threshold: 0
-        }
+            threshold: 0,
+        },
     )
 
     private root: ShadowRoot
@@ -225,9 +225,9 @@ export class BetterImage extends HTMLElement {
     private parseSourcesAttribute(data: string): ImageVariant[] {
         return data
             .split(' ')
-            .map(item => item.trim())
+            .map((item) => item.trim())
             .filter(Boolean)
-            .map(item => {
+            .map((item) => {
                 const separatorIndex = item.indexOf(':')
 
                 if (separatorIndex === -1) {
@@ -239,7 +239,7 @@ export class BetterImage extends HTMLElement {
 
                 return {
                     width,
-                    src
+                    src,
                 }
             })
             .filter((item): item is ImageVariant => {
@@ -293,7 +293,7 @@ export class BetterImage extends HTMLElement {
     private findAcceptableVariants(targetWidth: number): ImageVariant[] {
         const minimumAcceptableWidth = targetWidth * BetterImage.MIN_ACCEPTABLE_WIDTH_RATIO
 
-        return this.sourcesMap.filter(variant => variant.width >= minimumAcceptableWidth)
+        return this.sourcesMap.filter((variant) => variant.width >= minimumAcceptableWidth)
     }
 
     private findClosestVariant(variants: ImageVariant[], targetWidth: number): ImageVariant | undefined {
@@ -329,7 +329,7 @@ export class BetterImage extends HTMLElement {
     private animateImageTransition(): void {
         this.image.animate([{ opacity: '0.92' }, { opacity: '1' }], {
             duration: 180,
-            easing: 'ease-out'
+            easing: 'ease-out',
         })
     }
 
@@ -377,9 +377,9 @@ export class BetterImage extends HTMLElement {
                 composed: true,
                 detail: {
                     previewSrc,
-                    fullSrc
-                }
-            })
+                    fullSrc,
+                },
+            }),
         )
     }
 
@@ -426,7 +426,7 @@ export class BetterImage extends HTMLElement {
 
         const response = await fetch(src, {
             method: 'GET',
-            cache: 'reload'
+            cache: 'reload',
         })
 
         if (!response.ok) {

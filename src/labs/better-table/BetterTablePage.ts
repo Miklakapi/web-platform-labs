@@ -53,17 +53,17 @@ export class BetterTablePage extends LitElement {
             {
                 key: 'id',
                 title: 'ID',
-                width: 80
+                width: 80,
             },
             {
                 key: 'name',
                 title: 'Name',
-                width: 220
+                width: 220,
             },
             {
                 key: 'sku',
                 title: 'SKU',
-                width: 180
+                width: 180,
             },
             {
                 key: 'color',
@@ -89,20 +89,20 @@ export class BetterTablePage extends LitElement {
                     wrapper.appendChild(label)
 
                     return wrapper
-                }
+                },
             },
             {
                 key: 'stock',
                 title: 'Stock',
                 width: 120,
                 className: ({ value }) => (Number(value) < 10 ? 'is-low-stock' : ''),
-                style: ({ value }) => (Number(value) < 10 ? 'color:#b91c1c;font-weight:600;' : '')
+                style: ({ value }) => (Number(value) < 10 ? 'color:#b91c1c;font-weight:600;' : ''),
             },
             {
                 key: 'price',
                 title: 'Price',
                 width: 120,
-                renderer: ({ value }) => `${Number(value).toFixed(2)} zł`
+                renderer: ({ value }) => `${Number(value).toFixed(2)} zł`,
             },
             {
                 key: 'image',
@@ -117,8 +117,8 @@ export class BetterTablePage extends LitElement {
                     img.style.objectFit = 'cover'
                     img.style.borderRadius = '6px'
                     return img
-                }
-            }
+                },
+            },
         ]
 
         const palette = ['#111827', '#ef4444', '#22c55e', '#3b82f6', '#eab308', '#a855f7']
@@ -130,14 +130,14 @@ export class BetterTablePage extends LitElement {
             color: palette[index % palette.length],
             stock: Math.floor(Math.random() * 30),
             price: Number((Math.random() * 100).toFixed(2)),
-            image: 'http://localhost:8080/api/better-image/photo1/blur'
+            image: 'http://localhost:8080/api/better-image/photo1/blur',
         }))
 
         betterTable.setData({
             columns,
-            rows: data
+            rows: data,
         })
 
-        betterTable.setRowStyle(row => (row.stock === 0 ? 'opacity:0.65;' : ''))
+        betterTable.setRowStyle((row) => (row.stock === 0 ? 'opacity:0.65;' : ''))
     }
 }

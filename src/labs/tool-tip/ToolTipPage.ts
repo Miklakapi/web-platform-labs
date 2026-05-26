@@ -106,7 +106,7 @@ export class ToolTipPage extends LitElement {
                 <button
                     class="edge-button middle-left"
                     ${tooltip('Middle left — left placement should stay inside the viewport', {
-                        placement: 'left'
+                        placement: 'left',
                     })}
                 >
                     Left
@@ -119,7 +119,7 @@ export class ToolTipPage extends LitElement {
                 <button
                     class="edge-button middle-right"
                     ${tooltip('Middle right — right placement should stay inside the viewport', {
-                        placement: 'right'
+                        placement: 'right',
                     })}
                 >
                     Right

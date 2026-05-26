@@ -14,7 +14,7 @@ export const routes: RouteItem[] = [
         loader: () => import('@/labs/home/HomePage'),
         render: () => html`
             <home-page></home-page>
-        `
+        `,
     },
     {
         path: '/better-image',
@@ -22,7 +22,7 @@ export const routes: RouteItem[] = [
         loader: () => import('@/labs/better-image/BetterImagePage'),
         render: () => html`
             <better-image-page></better-image-page>
-        `
+        `,
     },
     {
         path: '/better-table',
@@ -30,7 +30,7 @@ export const routes: RouteItem[] = [
         loader: () => import('@/labs/better-table/BetterTablePage'),
         render: () => html`
             <better-table-page></better-table-page>
-        `
+        `,
     },
     {
         path: '/tool-tip',
@@ -38,7 +38,7 @@ export const routes: RouteItem[] = [
         loader: () => import('@/labs/tool-tip/ToolTipPage'),
         render: () => html`
             <tool-tip-page></tool-tip-page>
-        `
+        `,
     },
     {
         path: '/better-select',
@@ -46,7 +46,7 @@ export const routes: RouteItem[] = [
         loader: () => import('@/labs/better-select/BetterSelectPage'),
         render: () => html`
             <better-select-page></better-select-page>
-        `
+        `,
     },
     {
         path: '/global-store',
@@ -54,7 +54,7 @@ export const routes: RouteItem[] = [
         loader: () => import('@/labs/global-store/GlobalStorePage'),
         render: () => html`
             <global-store-page></global-store-page>
-        `
+        `,
     },
     {
         path: '/tri-state',
@@ -62,7 +62,7 @@ export const routes: RouteItem[] = [
         loader: () => import('@/labs/tri-state/TriStatePage'),
         render: () => html`
             <tri-state-page></tri-state-page>
-        `
+        `,
     },
     {
         path: '/better-dialog',
@@ -70,8 +70,8 @@ export const routes: RouteItem[] = [
         loader: () => import('@/labs/better-dialog/BetterDialogPage'),
         render: () => html`
             <better-dialog-page></better-dialog-page>
-        `
-    }
+        `,
+    },
 ]
 
 export function getCurrentPath(): string {
@@ -79,12 +79,12 @@ export function getCurrentPath(): string {
 }
 
 export function isKnownRoute(path: string): boolean {
-    return routes.some(route => route.path === path)
+    return routes.some((route) => route.path === path)
 }
 
 export function getCurrentRoute(): RouteItem {
     const currentPath = getCurrentPath()
-    return routes.find(route => route.path === currentPath) || routes[0]
+    return routes.find((route) => route.path === currentPath) || routes[0]
 }
 
 export function navigate(path: string) {

@@ -21,7 +21,7 @@ export function defineStore<TStore extends Record<string, unknown>>(setup: () =>
 
                 subscribe(subscriber: StoreSubscriber): Unsubscribe {
                     return storeContext.subscribe(subscriber)
-                }
+                },
             }
 
             return storeInstance
@@ -50,7 +50,7 @@ function createStoreContext(): StoreContext {
 
     return {
         subscribe,
-        notify
+        notify,
     }
 }
 
@@ -97,7 +97,7 @@ export function ref<T>(initialValue: T): Ref<T> {
             storeContext.notify()
         },
 
-        subscribe
+        subscribe,
     }
 
     return refValue

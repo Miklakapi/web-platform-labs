@@ -84,11 +84,11 @@ export class SideMenu extends LitElement {
 
                 <nav>
                     ${routes.map(
-                        route => html`
+                        (route) => html`
                             <button class=${this.currentPath === route.path ? 'active' : ''} @click=${() => this.handleNavigate(route.path)}>
                                 ${route.title}
                             </button>
-                        `
+                        `,
                     )}
                 </nav>
             </aside>

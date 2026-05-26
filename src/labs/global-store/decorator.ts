@@ -11,13 +11,13 @@ export function store<TValue>(subscribable: TValue & Subscribable) {
             },
 
             configurable: true,
-            enumerable: true
+            enumerable: true,
         })
 
         prototype.connectedCallback = function connectedCallbackWithStore(
             this: LitLikeElement & {
                 [storeDecoratorSubscriptionsKey]?: StoreDecoratorSubscription[]
-            }
+            },
         ): void {
             originalConnectedCallback.call(this)
 
@@ -25,7 +25,7 @@ export function store<TValue>(subscribable: TValue & Subscribable) {
                 this[storeDecoratorSubscriptionsKey] = []
             }
 
-            const alreadySubscribed = this[storeDecoratorSubscriptionsKey].some(subscription => {
+            const alreadySubscribed = this[storeDecoratorSubscriptionsKey].some((subscription) => {
                 return subscription.propertyKey === propertyKey
             })
 
@@ -39,7 +39,7 @@ export function store<TValue>(subscribable: TValue & Subscribable) {
 
             this[storeDecoratorSubscriptionsKey].push({
                 propertyKey,
-                unsubscribe
+                unsubscribe,
             })
 
             this.requestUpdate(propertyKey)
@@ -48,7 +48,7 @@ export function store<TValue>(subscribable: TValue & Subscribable) {
         prototype.disconnectedCallback = function disconnectedCallbackWithStore(
             this: LitLikeElement & {
                 [storeDecoratorSubscriptionsKey]?: StoreDecoratorSubscription[]
-            }
+            },
         ): void {
             const subscriptions = this[storeDecoratorSubscriptionsKey] ?? []
 
@@ -58,7 +58,7 @@ export function store<TValue>(subscribable: TValue & Subscribable) {
                 }
             }
 
-            this[storeDecoratorSubscriptionsKey] = subscriptions.filter(subscription => {
+            this[storeDecoratorSubscriptionsKey] = subscriptions.filter((subscription) => {
                 return subscription.propertyKey !== propertyKey
             })
 

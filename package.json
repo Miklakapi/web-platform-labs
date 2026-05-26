@@ -10,13 +10,16 @@
     "author": "",
     "type": "module",
     "main": "index.js",
+    "prettier": "@miklakapi/prettier-config",
     "scripts": {
-        "dev": "vite"
+        "dev": "vite",
+        "format": "prettier --write ."
     },
     "dependencies": {
         "lit": "^3.3.2"
     },
     "devDependencies": {
+        "@miklakapi/prettier-config": "^1.0.0",
         "@types/node": "^25.3.5",
         "prettier": "^3.8.3",
         "ts-lit-plugin": "^2.0.2",

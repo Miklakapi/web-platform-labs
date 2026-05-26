@@ -57,7 +57,7 @@ export class BetterImagePage extends LitElement {
                 "
                     ></better-image>
                     <br />
-                `
+                `,
             )}
         `
     }

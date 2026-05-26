@@ -295,11 +295,11 @@ class BetterDialog extends LitElement {
         this.dispatchEvent(
             new CustomEvent('close', {
                 detail: {
-                    opened: this.opened
+                    opened: this.opened,
                 },
                 bubbles: true,
-                composed: true
-            })
+                composed: true,
+            }),
         )
     }
 }

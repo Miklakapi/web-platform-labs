@@ -187,25 +187,25 @@ class ToolTipController {
             case 'top':
                 return {
                     x: anchorRect.left + anchorRect.width / 2 - tooltipRect.width / 2,
-                    y: anchorRect.top - tooltipRect.height - gap
+                    y: anchorRect.top - tooltipRect.height - gap,
                 }
 
             case 'bottom':
                 return {
                     x: anchorRect.left + anchorRect.width / 2 - tooltipRect.width / 2,
-                    y: anchorRect.bottom + gap
+                    y: anchorRect.bottom + gap,
                 }
 
             case 'left':
                 return {
                     x: anchorRect.left - tooltipRect.width - gap,
-                    y: anchorRect.top + anchorRect.height / 2 - tooltipRect.height / 2
+                    y: anchorRect.top + anchorRect.height / 2 - tooltipRect.height / 2,
                 }
 
             case 'right':
                 return {
                     x: anchorRect.right + gap,
-                    y: anchorRect.top + anchorRect.height / 2 - tooltipRect.height / 2
+                    y: anchorRect.top + anchorRect.height / 2 - tooltipRect.height / 2,
                 }
         }
     }

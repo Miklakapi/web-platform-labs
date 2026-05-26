@@ -63,7 +63,7 @@ export class BetterTable<T = any> extends HTMLElement {
             this.columnsInternal = options.columns.map((column, index) => ({
                 ...column,
                 _id: `${column.key}-${index}`,
-                width: column.width ?? 160
+                width: column.width ?? 160,
             }))
         }
 
@@ -268,7 +268,7 @@ export class BetterTable<T = any> extends HTMLElement {
 
         const fragment = document.createDocumentFragment()
 
-        this.columnsInternal.forEach(column => {
+        this.columnsInternal.forEach((column) => {
             fragment.appendChild(this.createHeaderCell(column))
         })
 
@@ -377,7 +377,7 @@ export class BetterTable<T = any> extends HTMLElement {
                 rowIndex,
                 column,
                 columnIndex,
-                value
+                value,
             }
 
             const cell = document.createElement('div')

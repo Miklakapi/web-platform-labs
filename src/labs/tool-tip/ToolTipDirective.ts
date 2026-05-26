@@ -65,9 +65,9 @@ class TooltipDirective extends Directive {
                 detail: {
                     anchor: this.element,
                     text: this.text,
-                    placement: this.options.placement ?? 'top'
-                }
-            })
+                    placement: this.options.placement ?? 'top',
+                },
+            }),
         )
     }
 
@@ -79,9 +79,9 @@ class TooltipDirective extends Directive {
                 bubbles: true,
                 composed: true,
                 detail: {
-                    anchor: this.element
-                }
-            })
+                    anchor: this.element,
+                },
+            }),
         )
     }
 }
