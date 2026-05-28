@@ -9,10 +9,10 @@
         "useDefineForClassFields": false,
         "experimentalDecorators": true,
         "lib": ["ES2024", "DOM", "DOM.Iterable"],
+        "plugins": [{ "name": "ts-lit-plugin" }],
         "paths": {
             "@/*": ["./src/*"]
         }
     },
-    "plugins": [{ "name": "ts-lit-plugin" }],
     "include": ["src/**/*.ts", "vite-env.d.ts"]
 }
