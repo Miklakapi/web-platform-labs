@@ -72,6 +72,14 @@ export const routes: RouteItem[] = [
             <better-dialog-page></better-dialog-page>
         `,
     },
+    {
+        path: '/better-calendar',
+        title: 'Better calendar',
+        loader: () => import('@/labs/better-calendar/BetterCalendarPage'),
+        render: () => html`
+            <better-calendar-page></better-calendar-page>
+        `,
+    },
 ]
 
 export function getCurrentPath(): string {
